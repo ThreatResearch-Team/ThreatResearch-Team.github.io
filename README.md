@@ -16,7 +16,7 @@ This section includes the latest threat indicators and is not meant to provide a
 
 | Date | Report | Origin | Targets |
 |---|---|---|---|
-| H1 2026 | [Russia-Based CIB Network Targeting Sub-Saharan Africa](indicators/meta-h1-2026-russia-based-cib-network-1.md) | Russia | Angola, Ghana, Kenya, South Africa |
+| H1 2026 | [Russia-Based CIB Network Targeting Sub-Saharan Africa](https://github.com/facebook/threat-research/blob/main/indicators/meta-h1-2026-russia-based-cib-network-1.md) | Russia | Angola, Ghana, Kenya, South Africa |
 
 
 
