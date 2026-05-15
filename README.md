@@ -1,4 +1,4 @@
-# 🛡️Threat Research Indicators 
+# 🛡️Meta Threat Research Indicators 
 <meta name="google-site-verification" content="yIv-b5Ch7wFzdTSnIO24T1QphyONKsaTKjOzpJVMMo4" />
 Welcome to the Meta Threat Research Indicator Repository, a dedicated resource for the sharing of Indicators of Compromise (IOCs) and other threat indicators with the external research community
 
