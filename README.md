@@ -1,11 +1,7 @@
-## <img src="https://threatresearch-team.github.io/meta_logo.svg" alt="Meta" height="48" style="vertical-align:middle; margin-right:8px;">Threat Research Indicators 
+## <img src="https://threatresearch-team.github.io/meta_logo.svg" alt="Meta" height="48" style="vertical-align:middle; margin-right:1px;">Threat Research Indicators 
 <meta name="google-site-verification" content="yIv-b5Ch7wFzdTSnIO24T1QphyONKsaTKjOzpJVMMo4" />
 Welcome to the Meta Threat Research Indicator Repository, a dedicated resource for the sharing of Indicators of Compromise (IOCs) and other threat indicators with the external research community. In support of the global security research community, we are publishing threat indicators related to covert influence operations detailed in our [Adversarial Threat Reports](https://transparency.meta.com/metasecurity/threat-reporting). We hope that by sharing indicators of compromise and behavioral signatures our industry partners and the broader security research community can enhance detection and mitigation of similar adversarial activities across platforms and the internet.
 
-## 📚 Resources
-- **Threat Reports:** For comprehensive threat analysis, [visit our Transparency Center]( https://transparency.fb.com/metasecurity/threat-reporting/)
-- **IOC & Threat Indicator Folders:** Access the repository of Indicators of Compromise and threat indicators [here](https://github.com/facebook/threat-research/tree/main/indicators)
-- **Index of tactics, techniques and procedures (TTPs) :** For an index of the current TTPs [here](https://github.com/facebook/threat-research/blob/main/Online_Operations_Killchain-TTPs.csv)
 
 ## 📋 Published Networks And Threat Indicators
 
@@ -25,6 +21,13 @@ Welcome to the Meta Threat Research Indicator Repository, a dedicated resource f
 | H2 2025 | [Belarus, Russia-Based Influence Operation Network Targeting Poland](https://threatresearch-team.github.io/indicators/meta-h2-2025-belarus-based-cib-network) | Belarus, Russia | Poland |
 | H2 2025 | [Russian Use of Authentic Operators in SSA](https://threatresearch-team.github.io/indicators/meta-h2-2025-russia-based-cib-network-2) | Russia | Sub-Saharan Africa |
 | H2 2025 | [Updating Attribution of Persistent Iranian Influence Operation to “Endless Mayfly”](https://threatresearch-team.github.io/indicators/meta-h2-2025-iran-based-cib-network) | Iran | United States, France, Israel, United Kingdom |
+
+
+## 📚 Resources
+- **Threat Reports:** For comprehensive threat analysis, [visit our Transparency Center]( https://transparency.fb.com/metasecurity/threat-reporting/)
+- **IOC & Threat Indicator Folders:** Access the repository of Indicators of Compromise and threat indicators [here](https://github.com/facebook/threat-research/tree/main/indicators)
+- **Index of tactics, techniques and procedures (TTPs) :** For an index of the current TTPs [here](https://github.com/facebook/threat-research/blob/main/Online_Operations_Killchain-TTPs.csv)
+  
 
 ## ❓ FAQ
 
