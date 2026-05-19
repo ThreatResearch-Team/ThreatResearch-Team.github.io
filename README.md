@@ -42,7 +42,7 @@ Meta employs a diverse array of techniques to identify malware and malicious act
 
 **How often are the Indicators of Compromise (IOCs) updated?**
 
-We regularly update the IOCs as part of our broader threat reporting. For further threat analysis, visit our [Transparency Center](https://transparency.fb.com/metasecurity/threat-reporting/)
+We regularly update the IOCs as part of our broader threat reporting. For further threat analysis, visit our [Transparency Center](https://transparency.fb.com/metasecurity/threat-reporting/).
 
 
 ## 📝 License
