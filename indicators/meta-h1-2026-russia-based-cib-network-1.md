@@ -15,6 +15,10 @@ We disrupted a network originating in Russia that targeted audiences in Sub-Saha
 
 The operation, which began in August 2025, promoted primarily authentic, off-platform news articles and social media channels that already supported narratives aligned with this campaign. In some cases, the network shared opinion articles published by legitimate news websites that carried bylines falsely attributed to real individuals or attributed to entirely fictitious personas. This tactic is consistent with [external reports](https://alleyesonwagner.org/2026/02/14/a-new-chef-in-the-kitchen-the-svr-takes-control-of-the-wagners-influence-branch-for-offensive-operations-in-the-global-south/) that Russian entities paid to place content in African outlets like Pulse Live Kenya. The network also used AI-generated content to make its accounts appear more authentic to local users, including in the Page's visual branding, such as profile photos and advertisements promoting the Page, as well as in its influence operation materials. We shared this information with our partners at OpenAI who conducted an independent investigation into the network, leading to the [removal](https://cdn.openai.com/pdf/df438d70-e3fe-4a6c-a403-ff632def8f79/disrupting-malicious-uses-of-ai.pdf) of the network from their platforms.
 
+![Example ads run by Facebook Pages in the network and an associated Pulse Live Kenya
+opinion article with the byline #FeatureByDr.RichardWeitz](https://threatresearch-team.github.io/images/meta_atr_h1_2026_01_russia_image.png)
+
+
 ## Indicators of Compromise
 
 *Note: URLs have been defanged for safety. Replace `[.]` with `.` to resolve.*
