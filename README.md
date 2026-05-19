@@ -16,6 +16,8 @@ This section includes the latest threat indicators and is not meant to provide a
 
 | Date | Report | Origin | Targets |
 |---|---|---|---|
+| H1 2026 | [Deep Dive: Dissecting the Kill Chain of an Early-Stage Iranian Influence Operation](https://threatresearch-team.github.io/indicators/meta-h1-2026-iran-based-cib-network-1) | Iran | United States, Iraq |
+| H1 2026 | [Russia-Based Influence Operation Network Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-1) | Russia | Sub-Saharan Africa |
 | H1 2026 | [Deep Dive: Dissecting the Kill Chain of an Early-Stage Iranian Influence Operation](https://github.com/ThreatResearch-Team/ThreatResearch-Team.github.io/blob/main/indicators/meta-h1-2026-iran-based-cib-network-1.md) | Iran | United States, Iraq |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-1/) | Russia | Sub-Saharan Africa |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Eastern Europe](https://github.com/facebook/threat-research/blob/main/indicators/meta-h1-2026-russia-based-cib-network-2.md) | Russia | Eastern Europe |
