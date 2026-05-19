@@ -1,4 +1,4 @@
-# # <img src="https://threatresearch-team.github.io/assets/Meta_lockup_negative primary_white_RGB.svg" alt="Meta" height="28" style="vertical-align:middle; margin-right:8px;">Meta Threat Research Indicators Meta Threat Research Indicators 
+## <img src="https://threatresearch-team.github.io/assets/meta-logo.svg" alt="Meta" height="28" style="vertical-align:middle; margin-right:8px;">Meta Threat Research Indicators 
 <meta name="google-site-verification" content="yIv-b5Ch7wFzdTSnIO24T1QphyONKsaTKjOzpJVMMo4" />
 Welcome to the Meta Threat Research Indicator Repository, a dedicated resource for the sharing of Indicators of Compromise (IOCs) and other threat indicators with the external research community
 
