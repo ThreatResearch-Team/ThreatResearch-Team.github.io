@@ -16,12 +16,6 @@ This section includes the latest threat indicators and is not meant to provide a
 
 | Date | Report | Origin | Targets |
 |---|---|---|---|
-| H2 2025 | [Moldova-Based Influence Operation Network Targeting Moldova](https://threatresearch-team.github.io/indicators/meta-h2-2025-moldova-based-cib-network) | Moldova | Moldova |
-| H2 2025 | [India-Based Influence Operation Network Targeting India](https://threatresearch-team.github.io/indicators/meta-h2-2025-india-based-cib-network) | India | India |
-| H2 2025 | [Poland-Based Influence Operation Network Targeting Poland](https://threatresearch-team.github.io/indicators/meta-h2-2025-poland-based-cib-network) | Poland | Poland |
-| H2 2025 | [Belarus, Russia-Based Influence Operation Network Targeting Poland](https://threatresearch-team.github.io/indicators/meta-h2-2025-belarus-based-cib-network) | Belarus, Russia | Poland |
-| H2 2025 | [Russian Use of Authentic Operators in SSA](https://threatresearch-team.github.io/indicators/meta-h2-2025-russia-based-cib-network-2) | Russia | Sub-Saharan Africa |
-| H2 2025 | [Updating Attribution of Persistent Iranian Influence Operation to “Endless Mayfly”](https://threatresearch-team.github.io/indicators/meta-h2-2025-iran-based-cib-network) | Iran | United States, France, Israel, United Kingdom |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Eastern Europe](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-2) | Russia | Eastern Europe |
 | H1 2026 | [Deep Dive: Domestic Pakistani Activity Displaying Wide Use of AI](https://threatresearch-team.github.io/indicators/meta-h1-2026-pakistan-based-cib-network) | Pakistan | Pakistan |
 | H1 2026 | [China-Based Influence Operation Network Targeting Taiwan](https://threatresearch-team.github.io/indicators/meta-h1-2026-china-based-cib-network) | China | Taiwan |
@@ -30,7 +24,12 @@ This section includes the latest threat indicators and is not meant to provide a
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-1) | Russia | Sub-Saharan Africa |
 | H1 2026 | [Iran-Based Influence Operation Network Targeting United States, Iraq](https://threatresearch-team.github.io/indicators/meta-h1-2026-iran-based-cib-network-1 ) | Iran | United States, Iraq |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-1 ) | Russia | Sub-Saharan Africa |
-
+| H2 2025 | [Moldova-Based Influence Operation Network Targeting Moldova](https://threatresearch-team.github.io/indicators/meta-h2-2025-moldova-based-cib-network) | Moldova | Moldova |
+| H2 2025 | [India-Based Influence Operation Network Targeting India](https://threatresearch-team.github.io/indicators/meta-h2-2025-india-based-cib-network) | India | India |
+| H2 2025 | [Poland-Based Influence Operation Network Targeting Poland](https://threatresearch-team.github.io/indicators/meta-h2-2025-poland-based-cib-network) | Poland | Poland |
+| H2 2025 | [Belarus, Russia-Based Influence Operation Network Targeting Poland](https://threatresearch-team.github.io/indicators/meta-h2-2025-belarus-based-cib-network) | Belarus, Russia | Poland |
+| H2 2025 | [Russian Use of Authentic Operators in SSA](https://threatresearch-team.github.io/indicators/meta-h2-2025-russia-based-cib-network-2) | Russia | Sub-Saharan Africa |
+| H2 2025 | [Updating Attribution of Persistent Iranian Influence Operation to “Endless Mayfly”](https://threatresearch-team.github.io/indicators/meta-h2-2025-iran-based-cib-network) | Iran | United States, France, Israel, United Kingdom |
 
 ## ❓ FAQ
 
