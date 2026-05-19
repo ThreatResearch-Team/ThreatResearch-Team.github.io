@@ -1,4 +1,4 @@
-## <img src="https://threatresearch-team.github.io/meta-logo.svg" alt="Meta" height="28" style="vertical-align:middle; margin-right:8px;">Meta Threat Research Indicators 
+## <img src="https://threatresearch-team.github.io/meta_logo.svg" alt="Meta" height="28" style="vertical-align:middle; margin-right:8px;">Meta Threat Research Indicators 
 <meta name="google-site-verification" content="yIv-b5Ch7wFzdTSnIO24T1QphyONKsaTKjOzpJVMMo4" />
 Welcome to the Meta Threat Research Indicator Repository, a dedicated resource for the sharing of Indicators of Compromise (IOCs) and other threat indicators with the external research community. In support of the global security research community, we are publishing threat indicators related to covert influence operations detailed in our [Adversarial Threat Reports](https://transparency.meta.com/metasecurity/threat-reporting). We hope that by sharing indicators of compromise and behavioral signatures our industry partners and the broader security research community can enhance detection and mitigation of similar adversarial activities across platforms and the internet.
 
