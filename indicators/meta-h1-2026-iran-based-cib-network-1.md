@@ -2,6 +2,7 @@
 layout: default
 title: "Deep Dive: Dissecting the Kill Chain of an Early-Stage Iranian Influence Operation"
 description: "IOCs from Meta's Adversarial Threat Report H1 2026."
+nav_exclude: true
 ---
 
 # Indicators of Compromise: Iran-Based Influence Operation Network Targeting United States, Iraq
