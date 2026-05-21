@@ -3,6 +3,7 @@ layout: default
 title: "Deep Dive: Domestic Pakistani Activity Displaying Wide Use of AI"
 description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f43ebb7c0af6091e56b03"
 ---
 
 # Deep Dive: Domestic Pakistani Activity Displaying Wide Use of AI
@@ -44,5 +45,5 @@ This network represents a notable volume and range of AI use for influence opera
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H1 2026](https://transparency.meta.com/sr/first-half-2026-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h1-2026-pakistan-based-cib-network on OTX](https://otx.alienvault.com/pulse/meta-h1-2026-pakistan-based-cib-network)
+- **AlienVault OTX Pulse:** [meta-h1-2026-pakistan-based-cib-network on OTX](https://otx.alienvault.com/pulse/6a0f43ebb7c0af6091e56b03)
 - **IOC File (GitHub):** [meta-h1-2026-pakistan-based-cib-network on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h1-2026-pakistan-based-cib-network.md)
