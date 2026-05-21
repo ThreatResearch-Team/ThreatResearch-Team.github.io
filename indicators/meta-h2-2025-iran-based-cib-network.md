@@ -3,6 +3,7 @@ layout: default
 title: "Updating Attribution of Persistent Iranian Influence Operation to “Endless Mayfly”"
 description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f4401843c80ab952e2150"
 ---
 
 # Updating Attribution of Persistent Iranian Influence Operation to “Endless Mayfly”
@@ -50,5 +51,5 @@ We are publishing this update and data in hopes that new information will contri
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2025](https://transparency.meta.com/sr/Q2-Q3-2025-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h2-2025-iran-based-cib-network on OTX](https://otx.alienvault.com/pulse/meta-h2-2025-iran-based-cib-network)
+- **AlienVault OTX Pulse:** [meta-h2-2025-iran-based-cib-network on OTX](https://otx.alienvault.com/pulse/6a0f4401843c80ab952e2150)
 - **IOC File (GitHub):** [meta-h2-2025-iran-based-cib-network on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h2-2025-iran-based-cib-network.md)
