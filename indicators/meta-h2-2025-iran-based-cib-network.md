@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
 ---
 
-# Iran-Based Influence Operation Network Targeting United States, France, Israel, United Kingdom
+# Updating Attribution of Persistent Iranian Influence Operation to “Endless Mayfly”
 
 Meta disrupted a Iran-based Coordinated Inauthentic Behavior (CIB) network targeting United States, France, Israel, United Kingdom. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H2 2025.
 
