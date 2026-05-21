@@ -17,8 +17,22 @@ import os
 import re
 import sys
 import glob
+import time
 
 from OTXv2 import OTXv2
+
+
+def with_retry(fn, retries=3, delay=10):
+    """Call fn(), retrying up to `retries` times on any exception, with increasing delay."""
+    for attempt in range(1, retries + 1):
+        try:
+            return fn()
+        except Exception as e:
+            if attempt == retries:
+                raise
+            print(f"  Attempt {attempt} failed ({e}). Retrying in {delay}s...")
+            time.sleep(delay)
+            delay *= 2  # exponential backoff: 10s, 20s, 40s
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -285,7 +299,7 @@ def sync_to_otx(api_key, md_files):
         try:
             if existing_id:
                 print(f"  Found existing pulse {existing_id} — updating...")
-                otx.edit_pulse(
+                with_retry(lambda: otx.edit_pulse(
                     pulse_id=existing_id,
                     body={
                         'description':        summary,
@@ -293,15 +307,15 @@ def sync_to_otx(api_key, md_files):
                         'references':         [ref_url],
                         'targeted_countries': countries,
                     }
-                )
-                otx.replace_pulse_indicators(
+                ))
+                with_retry(lambda: otx.replace_pulse_indicators(
                     pulse_id=existing_id,
                     new_indicators=iocs
-                )
+                ))
                 print("  Updated successfully.")
             else:
                 print("  No existing pulse — creating new...")
-                response = otx.create_pulse(
+                response = with_retry(lambda: otx.create_pulse(
                     name=title,
                     public=True,
                     description=summary,
@@ -310,12 +324,15 @@ def sync_to_otx(api_key, md_files):
                     tlp='white',
                     references=[ref_url],
                     targeted_countries=countries,
-                )
+                ))
                 print(f"  Created. Pulse ID: {response.get('id', 'unknown')}")
 
         except Exception as e:
             print(f"  ERROR: {e}")
             sys.exit(1)
+
+        # Brief pause between files to avoid overwhelming the OTX API
+        time.sleep(2)
 
     print(f"\n{'='*60}")
     print("All files processed.")
