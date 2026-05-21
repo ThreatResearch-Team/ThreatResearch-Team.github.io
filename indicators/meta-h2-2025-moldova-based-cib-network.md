@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: Moldova-Based Influence Operation Network Targeting Moldova
+# Moldova-Based Influence Operation Network Targeting Moldova
 
 Meta disrupted a Moldova-based Coordinated Inauthentic Behavior (CIB) network targeting Moldova. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H2 2025.
 
