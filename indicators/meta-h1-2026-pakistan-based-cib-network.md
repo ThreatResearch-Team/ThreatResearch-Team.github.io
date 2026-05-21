@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
 ---
 
-# Pakistan-Based Influence Operation Network Targeting Pakistan
+# Deep Dive: Domestic Pakistani Activity Displaying Wide Use of AI
 
 Meta disrupted a Pakistan-based Coordinated Inauthentic Behavior (CIB) network targeting Pakistan. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H1 2026.
 
