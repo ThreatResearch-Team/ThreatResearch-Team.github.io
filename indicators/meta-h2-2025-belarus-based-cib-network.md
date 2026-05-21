@@ -3,6 +3,7 @@ layout: default
 title: "Belarus, Russia-Based Influence Operation Network Targeting Poland"
 description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f43fc62a4d74fcb84ef47"
 ---
 
 # Belarus, Russia-Based Influence Operation Network Targeting Poland
@@ -31,5 +32,5 @@ We observed that network operators strategically disseminated messaging focused 
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2025](https://transparency.meta.com/sr/Q2-Q3-2025-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h2-2025-belarus-based-cib-network on OTX](https://otx.alienvault.com/pulse/meta-h2-2025-belarus-based-cib-network)
+- **AlienVault OTX Pulse:** [meta-h2-2025-belarus-based-cib-network on OTX](https://otx.alienvault.com/pulse/6a0f43fc62a4d74fcb84ef47)
 - **IOC File (GitHub):** [meta-h2-2025-belarus-based-cib-network on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h2-2025-belarus-based-cib-network.md)
