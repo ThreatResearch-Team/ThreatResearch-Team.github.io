@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: Belarus, Russia-Based Influence Operation Network Targeting Poland
+# Belarus, Russia-Based Influence Operation Network Targeting Poland
 
 Meta disrupted a Belarus, Russia-based Coordinated Inauthentic Behavior (CIB) network targeting Poland. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H2 2025.
 
