@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: Russia-Based Influence Operation Network Targeting Eastern Europe
+# Russia-Based Influence Operation Network Targeting Eastern Europe
 
 Meta disrupted a Russia-based Coordinated Inauthentic Behavior (CIB) network targeting Eastern Europe. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H1 2026.
 
