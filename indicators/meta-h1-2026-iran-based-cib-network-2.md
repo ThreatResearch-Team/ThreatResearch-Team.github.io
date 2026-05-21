@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: Iran-Based Influence Operation Network Targeting Azerbaijan
+# Iran-Based Influence Operation Network Targeting Azerbaijan
 
 Meta disrupted a Iran-based Coordinated Inauthentic Behavior (CIB) network targeting Azerbaijan. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H1 2026.
 
