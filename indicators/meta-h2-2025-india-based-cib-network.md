@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: India-Based Influence Operation Network Targeting India
+# India-Based Influence Operation Network Targeting India
 
 Meta disrupted a India-based Coordinated Inauthentic Behavior (CIB) network targeting India. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H2 2025.
 
