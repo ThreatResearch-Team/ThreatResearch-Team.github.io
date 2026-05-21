@@ -3,6 +3,7 @@ layout: default
 title: "Iran-Based Influence Operation Network Targeting Azerbaijan"
 description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f43e3ba7039d1686a5365"
 ---
 
 # Iran-Based Influence Operation Network Targeting Azerbaijan
@@ -27,5 +28,5 @@ This operation, active since 2022, was characterized by high-quality persona bui
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H1 2026](https://transparency.meta.com/sr/first-half-2026-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h1-2026-iran-based-cib-network-2 on OTX](https://otx.alienvault.com/pulse/meta-h1-2026-iran-based-cib-network-2)
+- **AlienVault OTX Pulse:** [meta-h1-2026-iran-based-cib-network-2 on OTX](https://otx.alienvault.com/pulse/6a0f43e3ba7039d1686a5365)
 - **IOC File (GitHub):** [meta-h1-2026-iran-based-cib-network-2 on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h1-2026-iran-based-cib-network-2.md)
