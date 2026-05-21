@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: China-Based Influence Operation Network Targeting Taiwan
+# China-Based Influence Operation Network Targeting Taiwan
 
 Meta disrupted a China-based Coordinated Inauthentic Behavior (CIB) network targeting Taiwan. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H1 2026.
 
