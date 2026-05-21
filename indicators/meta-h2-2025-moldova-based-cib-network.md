@@ -3,6 +3,7 @@ layout: default
 title: "Moldova-Based Influence Operation Network Targeting Moldova"
 description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f4409f124d4dc619629c8"
 ---
 
 # Moldova-Based Influence Operation Network Targeting Moldova
@@ -33,5 +34,5 @@ We observed that network operators systematically amplified messaging supportive
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2025](https://transparency.meta.com/sr/Q2-Q3-2025-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h2-2025-moldova-based-cib-network on OTX](https://otx.alienvault.com/pulse/meta-h2-2025-moldova-based-cib-network)
+- **AlienVault OTX Pulse:** [meta-h2-2025-moldova-based-cib-network on OTX](https://otx.alienvault.com/pulse/6a0f4409f124d4dc619629c8)
 - **IOC File (GitHub):** [meta-h2-2025-moldova-based-cib-network on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h2-2025-moldova-based-cib-network.md)
