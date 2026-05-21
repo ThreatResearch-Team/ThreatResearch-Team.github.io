@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
 ---
 
-# Russia-Based Influence Operation Network Targeting Sub-Saharan Africa
+# Russian Use of Authentic Operators in Sub-Saharan Africa
 
 Meta disrupted a Russia-based Coordinated Inauthentic Behavior (CIB) network targeting Sub-Saharan Africa. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H2 2025.
 
