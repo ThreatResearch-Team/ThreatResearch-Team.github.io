@@ -5,7 +5,7 @@ description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
 ---
 
-# Indicators of Compromise: Iran-Based Influence Operation Network Targeting United States, Iraq
+# Iran-Based Influence Operation Network Targeting United States, Iraq
 
 Meta disrupted a Iran-based Coordinated Inauthentic Behavior (CIB) network targeting United States, Iraq. This file contains Indicators of Compromise (IOCs) from Meta’s Adversarial Threat Report H1 2026.
 
