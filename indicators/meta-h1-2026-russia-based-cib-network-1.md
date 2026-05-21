@@ -3,6 +3,7 @@ layout: default
 title: "Russia-Based Influence Operation Network Targeting Sub-Saharan Africa"
 description: "IOCs from Meta's Adversarial Threat Report H1 2026."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f43f3dee0f63b19bf9d1b"
 ---
 
 # Russia-Based Influence Operation Network Targeting Sub-Saharan Africa
@@ -35,5 +36,5 @@ opinion article with the byline #FeatureByDr.RichardWeitz" style="width:60%;">
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H1 2026](https://transparency.meta.com/sr/first-half-2026-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h1-2026-russia-based-cib-network-1 on OTX](https://otx.alienvault.com/pulse/meta-h1-2026-russia-based-cib-network-1)
+- **AlienVault OTX Pulse:** [meta-h1-2026-russia-based-cib-network-1 on OTX](https://otx.alienvault.com/pulse/6a0f43f3dee0f63b19bf9d1b)
 - **IOC File (GitHub):** [meta-h1-2026-russia-based-cib-network-1 on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h1-2026-russia-based-cib-network-1.md)
