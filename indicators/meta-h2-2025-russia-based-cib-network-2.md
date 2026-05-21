@@ -3,6 +3,7 @@ layout: default
 title: "Russian Use of Authentic Operators in SSA"
 description: "IOCs from Meta's Adversarial Threat Report H2 2025."
 nav_exclude: true
+otx_pulse_url: "https://otx.alienvault.com/pulse/6a0f440d17a56dd8566b1001"
 ---
 
 # Russian Use of Authentic Operators in Sub-Saharan Africa
@@ -57,5 +58,5 @@ We found this activity as a result of an internal investigation into suspected c
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2025](https://transparency.meta.com/sr/Q2-Q3-2025-Adversarial-threat-report/)
-- **AlienVault OTX Pulse:** [meta-h2-2025-russia-based-cib-network-2 on OTX](https://otx.alienvault.com/pulse/meta-h2-2025-russia-based-cib-network-2)
+- **AlienVault OTX Pulse:** [meta-h2-2025-russia-based-cib-network-2 on OTX](https://otx.alienvault.com/pulse/6a0f440d17a56dd8566b1001)
 - **IOC File (GitHub):** [meta-h2-2025-russia-based-cib-network-2 on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/meta-h2-2025-russia-based-cib-network-2.md)
