@@ -136,6 +136,10 @@ def extract_summary(content):
     # Collapse excessive blank lines
     raw = re.sub(r'\n{3,}', '\n\n', raw).strip()
 
+    # OTX description field is capped at 1024 characters
+    if len(raw) > 1024:
+        raw = raw[:1021].rsplit(' ', 1)[0] + '...'
+
     return raw
 
 
