@@ -24,4 +24,5 @@ jobs:
       - name: Run OTX Sync Script
         env:
           OTX_API_KEY: ${{ secrets.OTX_API_KEY }}
-        run: python .github/scripts/otx_sync.py
+        run: python .github/scripts/otx_fetch_ids.py
+
