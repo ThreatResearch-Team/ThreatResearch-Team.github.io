@@ -290,8 +290,8 @@ def sync_to_otx(api_key, md_files):
         print(f"  Reference:          {ref_url}")
 
         if not iocs:
-            print("  No IOCs in table — creating summary-only pulse (no indicators).")
-            # Still create/update the pulse with summary and metadata, just no indicators
+            print("  No IOCs found — skipping (OTX requires at least one indicator).")
+            continue
 
         print("  Checking for existing pulse...")
         existing_id = find_existing_pulse(otx, title)
