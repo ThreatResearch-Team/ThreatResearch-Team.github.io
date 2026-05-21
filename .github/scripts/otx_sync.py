@@ -5,14 +5,12 @@ otx_sync.py
 Reads all .md files in the indicators/ directory and creates or updates
 AlienVault OTX pulses for each file that contains IOCs.
 
-Behaviour:
-- Run on-demand only (triggered manually via GitHub Actions workflow_dispatch).
-- Extracts the full network summary as the pulse description.
-- Sets the reference to the GitHub Pages HTML URL for the indicator page.
-- Applies standard tags plus country-of-origin and targeted-country tags
-  derived from the filename.
-- If a pulse with the same name already exists in the account, it updates it
-  instead of creating a duplicate.
+Fixes vs previous version:
+- Handles the Unicode right-single-quote (U+2019) in section header
+- Extracts full summary including ### sub-sections
+- Populates targeted_countries from the title/description line
+- Reference points to GitHub Pages HTML URL
+- Idempotent: updates existing pulse instead of creating duplicates
 """
 
 import os
@@ -23,29 +21,11 @@ import glob
 from OTXv2 import OTXv2
 
 # ---------------------------------------------------------------------------
-# OTX indicator type mapping
+# Configuration
 # ---------------------------------------------------------------------------
-TYPE_MAP = {
-    'url':                'URL',
-    'domain':             'domain',
-    'hostname':           'hostname',
-    'ipv4':               'IPv4',
-    'ip':                 'IPv4',
-    'ipv6':               'IPv6',
-    'sha256':             'FileHash-SHA256',
-    'sha-256':            'FileHash-SHA256',
-    'md5':                'FileHash-MD5',
-    'sha1':               'FileHash-SHA1',
-    'sha-1':              'FileHash-SHA1',
-    'email':              'email',
-    'cve':                'CVE',
-    'social media account': 'URL',   # treat as URL
-}
 
-# Base URL for the GitHub Pages site
 GITHUB_PAGES_BASE = "https://threatresearch-team.github.io/indicators"
 
-# Standard tags applied to every pulse
 BASE_TAGS = [
     'Meta',
     'ThreatResearch',
@@ -56,31 +36,57 @@ BASE_TAGS = [
     'elections',
 ]
 
-# Country name normalisation: keywords found in filenames → display names
-COUNTRY_KEYWORDS = {
-    'russia':     'Russia',
-    'china':      'China',
-    'iran':       'Iran',
-    'pakistan':   'Pakistan',
-    'belarus':    'Belarus',
-    'india':      'India',
-    'moldova':    'Moldova',
-    'poland':     'Poland',
+# OTX indicator type mapping
+TYPE_MAP = {
+    'url':                  'URL',
+    'domain':               'domain',
+    'hostname':             'hostname',
+    'ipv4':                 'IPv4',
+    'ip':                   'IPv4',
+    'ipv6':                 'IPv6',
+    'sha256':               'FileHash-SHA256',
+    'sha-256':              'FileHash-SHA256',
+    'md5':                  'FileHash-MD5',
+    'sha1':                 'FileHash-SHA1',
+    'sha-1':                'FileHash-SHA1',
+    'email':                'email',
+    'cve':                  'CVE',
+    'social media account': 'URL',
+    'proxy ip':             'IPv4',
+    'proxy ipv4':           'IPv4',
+    'proxy ipv6':           'IPv6',
 }
 
-# Targeted-country hints derived from filename keywords
-TARGET_KEYWORDS = {
-    'ssa':            'Sub-Saharan Africa',
-    'africa':         'Sub-Saharan Africa',
-    'taiwan':         'Taiwan',
-    'azerbaijan':     'Azerbaijan',
-    'moldova':        'Moldova',
-    'poland':         'Poland',
-    'india':          'India',
-    'pakistan':       'Pakistan',
-    'eastern-europe': 'Eastern Europe',
-    'iraq':           'Iraq',
-    'us':             'United States',
+# Map keywords in filename → origin country tags
+ORIGIN_KEYWORDS = {
+    'russia':   'Russia',
+    'china':    'China',
+    'iran':     'Iran',
+    'pakistan': 'Pakistan',
+    'belarus':  'Belarus',
+    'india':    'India',
+    'moldova':  'Moldova',
+    'poland':   'Poland',
+}
+
+# Map keywords in title "Targeting X" → OTX targeted_countries values
+# OTX uses full country names as returned by their API
+TARGETED_COUNTRY_MAP = {
+    'sub-saharan africa':   'Sub-Saharan Africa',
+    'ssa':                  'Sub-Saharan Africa',
+    'africa':               'Sub-Saharan Africa',
+    'taiwan':               'Taiwan',
+    'azerbaijan':           'Azerbaijan',
+    'moldova':              'Moldova, Republic of',
+    'poland':               'Poland',
+    'india':                'India',
+    'pakistan':             'Pakistan',
+    'eastern europe':       'Eastern Europe',
+    'iraq':                 'Iraq',
+    'united states':        'United States of America',
+    'france':               'France',
+    'israel':               'Israel',
+    'united kingdom':       'United Kingdom',
 }
 
 
@@ -89,7 +95,6 @@ TARGET_KEYWORDS = {
 # ---------------------------------------------------------------------------
 
 def parse_front_matter(content):
-    """Return dict of key:value pairs from YAML front matter."""
     fm = {}
     match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL)
     if match:
@@ -102,21 +107,23 @@ def parse_front_matter(content):
 
 def extract_summary(content):
     """
-    Extract the body text from the '## Meta's Adversarial Threat Report Network Summary'
-    section (or the first substantial paragraph after the H1 title).
-    Strips Markdown image tags and link syntax, returning plain text.
+    Extract everything between the Network Summary header and the
+    Indicators of Compromise header, stripping Markdown formatting.
+    Handles both ASCII apostrophe (') and Unicode right-single-quote (').
     """
-    # Try the dedicated summary section first
-    section_match = re.search(
-        r"##\s+Meta'?s? Adversarial Threat Report Network Summary\s*\n(.*?)(?=\n##\s+|\Z)",
-        content, re.DOTALL | re.IGNORECASE
+    # Match the summary section header with any apostrophe variant
+    # Then capture everything up to ## Indicators of Compromise
+    pattern = (
+        r"##\s+Meta[\u2019']s\s+Adversarial\s+Threat\s+Report\s+Network\s+Summary"
+        r"\s*\n"
+        r"(.*?)"
+        r"(?=\n##\s+Indicators\s+of\s+Compromise|\Z)"
     )
-    if section_match:
-        raw = section_match.group(1)
-    else:
-        # Fall back to the first paragraph after the H1
-        h1_match = re.search(r'^#\s+.+\n+(.*?)(?=\n##\s+|\Z)', content, re.DOTALL | re.MULTILINE)
-        raw = h1_match.group(1) if h1_match else ''
+    match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
+    if not match:
+        return ''
+
+    raw = match.group(1)
 
     # Strip HTML image tags
     raw = re.sub(r'<img[^>]*>', '', raw)
@@ -124,13 +131,15 @@ def extract_summary(content):
     raw = re.sub(r'!\[.*?\]\(.*?\)', '', raw)
     # Convert Markdown links to plain text
     raw = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', raw)
-    # Collapse whitespace
+    # Strip ### sub-headers (keep the text, remove the ### prefix)
+    raw = re.sub(r'^#{2,}\s+', '', raw, flags=re.MULTILINE)
+    # Collapse excessive blank lines
     raw = re.sub(r'\n{3,}', '\n\n', raw).strip()
+
     return raw
 
 
 def parse_iocs(content):
-    """Return list of {'indicator': ..., 'type': ...} dicts from the IOC table."""
     iocs = []
     parts = re.split(r'##\s+Indicators of Compromise', content, flags=re.IGNORECASE)
     if len(parts) < 2:
@@ -146,51 +155,63 @@ def parse_iocs(content):
         raw_type  = cols[0].strip('*_ ')
         raw_value = cols[1].strip('*_ ')
 
-        # Skip header and separator rows
         if re.match(r'^[-:]+$', raw_value) or raw_type.lower() in ('indicator type', 'type'):
             continue
 
-        # Clean code fences and defanging
         raw_value = raw_value.replace('`', '').replace('[.]', '.')
+        otx_type  = TYPE_MAP.get(raw_type.lower())
 
-        otx_type = TYPE_MAP.get(raw_type.lower())
         if otx_type and raw_value:
             iocs.append({'indicator': raw_value, 'type': otx_type})
 
     return iocs
 
 
-def build_tags_from_filename(filename):
+def extract_targeted_countries(title):
     """
-    Derive origin and target country tags from the filename.
-    e.g. 'meta-h1-2026-russia-based-cib-network-1.md'
-    → ['Russia', 'Sub-Saharan Africa'] (added to BASE_TAGS)
+    Parse 'Targeting X' from the pulse title and map to OTX country names.
+    Handles comma-separated lists, e.g. 'Targeting United States, Iraq'.
     """
+    match = re.search(r'[Tt]argeting\s+(.+)$', title)
+    if not match:
+        return []
+
+    targets_raw = match.group(1).strip().rstrip('.')
+    # Split on commas
+    parts = [p.strip().lower() for p in targets_raw.split(',')]
+
+    countries = []
+    for part in parts:
+        for keyword, otx_name in TARGETED_COUNTRY_MAP.items():
+            if keyword in part and otx_name not in countries:
+                countries.append(otx_name)
+
+    return countries
+
+
+def build_tags(filename, title):
     stem = os.path.splitext(os.path.basename(filename))[0].lower()
     extra = []
 
-    for kw, label in COUNTRY_KEYWORDS.items():
-        if kw in stem:
-            extra.append(label)
-
-    for kw, label in TARGET_KEYWORDS.items():
+    for kw, label in ORIGIN_KEYWORDS.items():
         if kw in stem and label not in extra:
             extra.append(label)
 
-    return extra
+    # Also add targeted country names as tags
+    for country in extract_targeted_countries(title):
+        if country not in extra:
+            extra.append(country)
+
+    return BASE_TAGS + extra
 
 
 def build_reference_url(filename):
-    """Return the GitHub Pages HTML URL for the indicator page."""
     stem = os.path.splitext(os.path.basename(filename))[0]
     return f"{GITHUB_PAGES_BASE}/{stem}/"
 
 
 def find_existing_pulse(otx, pulse_name):
-    """
-    Search the authenticated user's pulses for one matching pulse_name.
-    Returns the pulse ID string, or None if not found.
-    """
+    """Search the user's own pulses for one matching pulse_name. Returns ID or None."""
     try:
         page = 1
         while True:
@@ -225,52 +246,53 @@ def sync_to_otx(api_key, md_files):
         summary     = extract_summary(content)
         iocs        = parse_iocs(content)
         ref_url     = build_reference_url(filepath)
-        extra_tags  = build_tags_from_filename(filepath)
-        all_tags    = BASE_TAGS + [t for t in extra_tags if t not in BASE_TAGS]
+        tags        = build_tags(filepath, title)
+        countries   = extract_targeted_countries(title)
 
-        print(f"  Title:     {title}")
-        print(f"  IOCs:      {len(iocs)}")
-        print(f"  Reference: {ref_url}")
-        print(f"  Tags:      {all_tags}")
+        print(f"  Title:              {title}")
+        print(f"  IOCs:               {len(iocs)}")
+        print(f"  Summary length:     {len(summary)} chars")
+        print(f"  Targeted countries: {countries}")
+        print(f"  Tags:               {tags}")
+        print(f"  Reference:          {ref_url}")
 
         if not iocs:
-            print("  No IOCs found — skipping.")
-            continue
+            print("  No IOCs in table — creating summary-only pulse (no indicators).")
+            # Still create/update the pulse with summary and metadata, just no indicators
 
-        # Check for an existing pulse with the same name
         print("  Checking for existing pulse...")
         existing_id = find_existing_pulse(otx, title)
 
         try:
             if existing_id:
-                print(f"  Found existing pulse: {existing_id} — updating...")
-                # Update description, tags, references, and replace all indicators
+                print(f"  Found existing pulse {existing_id} — updating...")
                 otx.edit_pulse(
                     pulse_id=existing_id,
                     body={
-                        'description': summary,
-                        'tags':        all_tags,
-                        'references':  [ref_url],
+                        'description':        summary,
+                        'tags':               tags,
+                        'references':         [ref_url],
+                        'targeted_countries': countries,
                     }
                 )
                 otx.replace_pulse_indicators(
                     pulse_id=existing_id,
                     new_indicators=iocs
                 )
-                print(f"  Updated successfully.")
+                print("  Updated successfully.")
             else:
-                print("  No existing pulse found — creating new pulse...")
+                print("  No existing pulse — creating new...")
                 response = otx.create_pulse(
                     name=title,
                     public=True,
                     description=summary,
                     indicators=iocs,
-                    tags=all_tags,
+                    tags=tags,
                     tlp='white',
                     references=[ref_url],
+                    targeted_countries=countries,
                 )
-                new_id = response.get('id', 'unknown')
-                print(f"  Created successfully. Pulse ID: {new_id}")
+                print(f"  Created. Pulse ID: {response.get('id', 'unknown')}")
 
         except Exception as e:
             print(f"  ERROR: {e}")
