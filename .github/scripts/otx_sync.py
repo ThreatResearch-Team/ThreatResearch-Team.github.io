@@ -70,23 +70,32 @@ ORIGIN_KEYWORDS = {
 }
 
 # Map keywords in title "Targeting X" → OTX targeted_countries values
-# OTX uses full country names as returned by their API
+# OTX uses ISO 3166 country names (3-char codes also accepted but names are clearer)
+# Note: regions like "Sub-Saharan Africa" and "Eastern Europe" are NOT valid OTX country names
+# For SSA reports we list the specific countries mentioned in the report body instead
 TARGETED_COUNTRY_MAP = {
-    'sub-saharan africa':   'Sub-Saharan Africa',
-    'ssa':                  'Sub-Saharan Africa',
-    'africa':               'Sub-Saharan Africa',
-    'taiwan':               'Taiwan',
-    'azerbaijan':           'Azerbaijan',
-    'moldova':              'Moldova, Republic of',
-    'poland':               'Poland',
-    'india':                'India',
-    'pakistan':             'Pakistan',
-    'eastern europe':       'Eastern Europe',
-    'iraq':                 'Iraq',
-    'united states':        'United States of America',
-    'france':               'France',
-    'israel':               'Israel',
-    'united kingdom':       'United Kingdom',
+    'taiwan':           'Taiwan',
+    'azerbaijan':       'Azerbaijan',
+    'moldova':          'Moldova, Republic of',
+    'poland':           'Poland',
+    'india':            'India',
+    'pakistan':         'Pakistan',
+    'iraq':             'Iraq',
+    'united states':    'United States of America',
+    'france':           'France',
+    'israel':           'Israel',
+    'united kingdom':   'United Kingdom',
+    'angola':           'Angola',
+    'ghana':            'Ghana',
+    'kenya':            'Kenya',
+    'south africa':     'South Africa',
+    'mali':             'Mali',
+    'nigeria':          'Nigeria',
+    'senegal':          'Senegal',
+    'cameroon':         'Cameroon',
+    'gabon':            'Gabon',
+    'benin':            'Benin',
+    'burkina faso':     'Burkina Faso',
 }
 
 
@@ -171,23 +180,32 @@ def parse_iocs(content):
     return iocs
 
 
-def extract_targeted_countries(title):
+def extract_targeted_countries(title, body=''):
     """
-    Parse 'Targeting X' from the pulse title and map to OTX country names.
-    Handles comma-separated lists, e.g. 'Targeting United States, Iraq'.
+    Parse targeted countries from the pulse title and, for regional titles
+    (Sub-Saharan Africa, Eastern Europe), also scan the body text for
+    specific country mentions. Returns a list of valid OTX country name strings.
     """
-    match = re.search(r'[Tt]argeting\s+(.+)$', title)
-    if not match:
-        return []
-
-    targets_raw = match.group(1).strip().rstrip('.')
-    # Split on commas
-    parts = [p.strip().lower() for p in targets_raw.split(',')]
-
     countries = []
-    for part in parts:
+
+    # First try to extract from the 'Targeting X' phrase in the title
+    match = re.search(r'[Tt]argeting\s+(.+)$', title)
+    if match:
+        targets_raw = match.group(1).strip().rstrip('.')
+        parts = [p.strip().lower() for p in targets_raw.split(',')]
+        for part in parts:
+            for keyword, otx_name in TARGETED_COUNTRY_MAP.items():
+                if keyword in part and otx_name not in countries:
+                    countries.append(otx_name)
+
+    # If title contains a regional term (SSA, Eastern Europe) or no countries found,
+    # scan the body text for specific country mentions
+    regional_terms = ['sub-saharan africa', 'ssa', 'eastern europe', 'africa']
+    title_lower = title.lower()
+    if not countries or any(t in title_lower for t in regional_terms):
+        body_lower = body.lower()
         for keyword, otx_name in TARGETED_COUNTRY_MAP.items():
-            if keyword in part and otx_name not in countries:
+            if keyword in body_lower and otx_name not in countries:
                 countries.append(otx_name)
 
     return countries
@@ -248,7 +266,7 @@ def sync_to_otx(api_key, md_files):
         iocs        = parse_iocs(content)
         ref_url     = build_reference_url(filepath)
         tags        = build_tags(filepath, title)
-        countries   = extract_targeted_countries(title)
+        countries   = extract_targeted_countries(title, body=summary)
 
         print(f"  Title:              {title}")
         print(f"  IOCs:               {len(iocs)}")
