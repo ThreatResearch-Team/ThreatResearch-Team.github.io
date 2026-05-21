@@ -213,15 +213,12 @@ def build_reference_url(filename):
 def find_existing_pulse(otx, pulse_name):
     """Search the user's own pulses for one matching pulse_name. Returns ID or None."""
     try:
-        page = 1
-        while True:
-            results = otx.get_my_pulses(page=page)
-            if not results:
-                break
+        # get_my_pulses fetches up to max_items pulses in one call (default 200)
+        results = otx.get_my_pulses(max_items=1000)
+        if results:
             for pulse in results:
                 if pulse.get('name', '').strip() == pulse_name.strip():
                     return pulse['id']
-            page += 1
     except Exception as e:
         print(f"  Warning: could not search existing pulses: {e}")
     return None
