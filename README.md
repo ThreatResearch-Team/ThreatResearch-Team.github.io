@@ -13,8 +13,6 @@ Welcome to the Meta Threat Research Indicator Repository, a dedicated resource f
 | H1 2026 | [Iran-Based Influence Operation Network Targeting Azerbaijan](https://threatresearch-team.github.io/indicators/meta-h1-2026-iran-based-cib-network-2) | Iran | Azerbaijan |
 | H1 2026 | [Deep Dive: Dissecting the Kill Chain of an Early-Stage Iranian Influence Operation](https://threatresearch-team.github.io/indicators/meta-h1-2026-iran-based-cib-network-1) | Iran | United States, Iraq |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-1) | Russia | Sub-Saharan Africa |
-| H1 2026 | [Iran-Based Influence Operation Network Targeting United States, Iraq](https://threatresearch-team.github.io/indicators/meta-h1-2026-iran-based-cib-network-1 ) | Iran | United States, Iraq |
-| H1 2026 | [Russia-Based Influence Operation Network Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-1 ) | Russia | Sub-Saharan Africa |
 | H2 2025 | [Moldova-Based Influence Operation Network Targeting Moldova](https://threatresearch-team.github.io/indicators/meta-h2-2025-moldova-based-cib-network) | Moldova | Moldova |
 | H2 2025 | [India-Based Influence Operation Network Targeting India](https://threatresearch-team.github.io/indicators/meta-h2-2025-india-based-cib-network) | India | India |
 | H2 2025 | [Poland-Based Influence Operation Network Targeting Poland](https://threatresearch-team.github.io/indicators/meta-h2-2025-poland-based-cib-network) | Poland | Poland |
