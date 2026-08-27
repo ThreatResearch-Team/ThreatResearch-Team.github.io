@@ -26,6 +26,6 @@ The operators behind this network engaged in complex deception by masquerading a
 
 ## Cross-Links
 
-- **Full ATR Report:** [Meta Adversarial Threat Report H2 2026](TBD)
+- **Full ATR Report:** [Meta Adversarial Threat Report H2 2026](https://transparency.meta.com/sr/H2-2026-adversarial-threat-report)
 - **AlienVault OTX Pulse:** [h2-2026-russia-cib-based-network on OTX](https://otx.alienvault.com/pulse/h2-2026-russia-cib-based-network)
 - **IOC File (GitHub):** [h2-2026-russia-cib-based-network on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/h2-2026-russia-cib-based-network.md)
