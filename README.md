@@ -7,7 +7,7 @@ Welcome to the Meta Threat Research Indicator Repository, a dedicated resource f
 
 | Date | Report | Origin | Targets |
 |---|---|---|---|
-| H2 2026 | [Ukraine and Bulgaria-Based Influence Operation Targeting United States, Germany, Italy, the United Kingdom, the Netherlands, France, Belgium, Latvia, Ukraine, and Moldova](https://threatresearch-team.github.io/indicators/h2-2026-ukraine-and-bulgaria-cib-based-network) | Ukraine and Bulgaria | United States, Germany, Italy, the United Kingdom, the Netherlands, France, Belgium, Latvia, Ukraine, and Moldova |
+| H2 2026 | [Ukraine and Bulgaria-Based Influence Operation Targeting Multiple Countries](https://threatresearch-team.github.io/indicators/h2-2026-ukraine-and-bulgaria-cib-based-network) | Ukraine and Bulgaria | United States, Germany, Italy, the United Kingdom, the Netherlands, France, Belgium, Latvia, Ukraine, and Moldova |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Eastern Europe](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-2) | Russia | Eastern Europe |
 | H1 2026 | [Deep Dive: Domestic Pakistani Activity Displaying Wide Use of AI](https://threatresearch-team.github.io/indicators/meta-h1-2026-pakistan-based-cib-network) | Pakistan | Pakistan |
 | H1 2026 | [China-Based Influence Operation Network Targeting Taiwan](https://threatresearch-team.github.io/indicators/meta-h1-2026-china-based-cib-network) | China | Taiwan |
