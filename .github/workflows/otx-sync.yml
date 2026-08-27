@@ -1,10 +1,10 @@
 name: Sync Indicators to AlienVault OTX
 
 on:
-  workflow_dispatch: # Manual trigger only — run from the Actions tab in GitHub
+  workflow_dispatch:
 
 permissions:
-  contents: write  # Required so the workflow can commit pulse URLs back to .md files
+  contents: write
 
 jobs:
   sync-to-otx:
@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.10'
 
