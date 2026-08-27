@@ -7,6 +7,15 @@ Welcome to the Meta Threat Research Indicator Repository, a dedicated resource f
 
 | Date | Report | Origin | Targets |
 |---|---|---|---|
+| H2 2026 | [Russia-Based Influence Operation Targeting Western Audiences](https://threatresearch-team.github.io/indicators/meta-h2-2026-russia-cib-based-network-2) | Russia | Western Audiences |
+| H2 2026 | [Israel-Based Influence Operation Targeting France, the UK, Australia, and Africa](https://threatresearch-team.github.io/indicators/meta-h2-2026-israel-cib-based-network) | Israel | France, the United Kingdom, Australia, Iran, Togo, Gabon, and Angola |
+| H2 2026 | [Iran-Based Influence Operation Targeting United States](https://threatresearch-team.github.io/indicators/meta-h2-2026-iran-cib-based-network) | Iran | United States |
+| H2 2026 | [Iran-Based Influence Operation Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h2-2026-iran-cib-based-network-3) | Iran | Sub-Saharan Africa |
+| H2 2026 | [Iran-Based Influence Operation Targeting Azerbaijan](https://threatresearch-team.github.io/indicators/meta-h2-2026-iran-cib-based-network-2) | Iran | Azerbaijan |
+| H2 2026 | [France and Spain-Based Influence Operation Targeting Sub-Saharan Africa](https://threatresearch-team.github.io/indicators/meta-h2-2026-france-and-spain-cib-based-network) | France and Spain | France, Mali, Chad, DRC, Senegal, Cameroon, Burkina Faso, and Côte d’Ivoire |
+| H2 2026 | [Russia-Based Influence Operation Targeting Hungary](https://threatresearch-team.github.io/indicators/meta-h2-2026-russia-cib-based-network-3) | Russia | Hungary |
+| H2 2026 | [Deep Dive: Beyond Brute Force—Doppelganger’s Changing Operations](https://threatresearch-team.github.io/indicators/meta-h2-2026-russia-cib-based-network-4) | Russia | France, Germany, Hungary |
+| H2 2026 | [Russia-Based Influence Operation Targeting Europe, the Middle East, and Africa](https://threatresearch-team.github.io/indicators/meta-h2-2026-russia-cib-based-network) | Russia | Europe, the Middle East, and Africa |
 | H2 2026 | [Ukraine and Bulgaria-Based Influence Operation Targeting Multiple Countries](https://threatresearch-team.github.io/indicators/meta-h2-2026-ukraine-and-bulgaria-cib-based-network) | Ukraine and Bulgaria | United States, Germany, Italy, the United Kingdom, the Netherlands, France, Belgium, Latvia, Ukraine, and Moldova |
 | H1 2026 | [Russia-Based Influence Operation Network Targeting Eastern Europe](https://threatresearch-team.github.io/indicators/meta-h1-2026-russia-based-cib-network-2) | Russia | Eastern Europe |
 | H1 2026 | [Deep Dive: Domestic Pakistani Activity Displaying Wide Use of AI](https://threatresearch-team.github.io/indicators/meta-h1-2026-pakistan-based-cib-network) | Pakistan | Pakistan |
