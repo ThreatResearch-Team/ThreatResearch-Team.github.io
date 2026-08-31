@@ -15,6 +15,10 @@ We disrupted a Coordinated Inauthentic Behavior network originating in Israel an
 
 Although the operation targeted a number of countries with targeted narratives, operators followed the same tactics in developing these distinct manipulation campaigns; the actors behind this activity established Pages and Instagram accounts posing as local, civically-engaged brands, news sources, religious organizations, and political activists. The operation then deployed clusters of fake, automated accounts that used AI to mass-produce contextually relevant comments designed to artificially boost engagement on the network's primary assets, a tactic to boost reach that the network’s own operators referred to as 'Mother-Child'. Ahead of France’s 2026 municipal elections, the network created brands to criticize political candidates and spread narratives about the "Islamization" of France.  Network operators disseminated varied messaging tailored to different regions, including partisan content in Togo and Gabon, anti-government messaging in Iran and Angola, and anti-immigrant and anti-Muslim campaigns in France, the United Kingdom, and Australia. The network also aimed a small cluster of these bots at the NYC mayoral campaign. These accounts posted into local Groups and made comments on Facebook. We found this network as part of Meta’s investigation into suspected Coordinated Inauthentic Behavior in the region.
 
+<img src="https://threatresearch-team.github.io/image/meta_atr_h2_2026_israel_image.png" alt="Image: Example of comments by inauthentic accounts on an Instagram account controlled by the network." style="width:60%;">
+
+*Image: Example of comments by inauthentic accounts on an Instagram account controlled by the network.*
+
 ## Indicators of Compromise
 
 *Note: URLs have been defanged for safety. Replace `[.]` with `.` to resolve.*
