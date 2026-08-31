@@ -45,5 +45,5 @@ The operation's central tactic was the creation and backstopping of a fabricated
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2026](https://transparency.meta.com/sr/H2-2026-adversarial-threat-report)
-- **AlienVault OTX Pulse:** [h2-2026-russia-cib-based-network-2 on OTX](https://otx.alienvault.com/pulse/h2-2026-russia-cib-based-network-2)
+- **AlienVault OTX Pulse:** [h2-2026-russia-cib-based-network-2 on OTX](https://otx.alienvault.com/pulse/6a94cd960fd0fb19930bdb54)
 - **IOC File (GitHub):** [h2-2026-russia-cib-based-network-2 on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/h2-2026-russia-cib-based-network-2.md)
