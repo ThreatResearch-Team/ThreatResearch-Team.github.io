@@ -30,5 +30,5 @@ The network engaged in sophisticated brand development, using inauthentic accoun
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2026](https://transparency.meta.com/sr/H2-2026-adversarial-threat-report)
-- **AlienVault OTX Pulse:** [h2-2026-iran-cib-based-network-2 on OTX](https://otx.alienvault.com/pulse/h2-2026-iran-cib-based-network-2)
+- **AlienVault OTX Pulse:** [h2-2026-iran-cib-based-network-2 on OTX](https://otx.alienvault.com/pulse/6a94cd9495ac9b883513a55a)
 - **IOC File (GitHub):** [h2-2026-iran-cib-based-network-2 on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/h2-2026-iran-cib-based-network-2.md)
