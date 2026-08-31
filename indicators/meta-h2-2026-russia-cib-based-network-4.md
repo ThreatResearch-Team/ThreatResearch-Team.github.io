@@ -63,5 +63,5 @@ We have remained vigilant through Doppelganger’s evolution from a single, cent
 ## Cross-Links
 
 - **Full ATR Report:** [Meta Adversarial Threat Report H2 2026](https://transparency.meta.com/sr/H2-2026-adversarial-threat-report)
-- **AlienVault OTX Pulse:** [h2-2026-russia-cib-based-network-4 on OTX](https://otx.alienvault.com/pulse/h2-2026-russia-cib-based-network-4)
+- **AlienVault OTX Pulse:** [h2-2026-russia-cib-based-network-4 on OTX](https://otx.alienvault.com/pulse/6a94cd970061e8c2a5837119)
 - **IOC File (GitHub):** [h2-2026-russia-cib-based-network-4 on GitHub](https://github.com/facebook/threat-research/blob/main/indicators/h2-2026-russia-cib-based-network-4.md)
