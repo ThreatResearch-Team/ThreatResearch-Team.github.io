@@ -2,393 +2,276 @@
 """
 otx_sync.py
 -----------
-Reads all .md files in the indicators/ directory and creates or updates
-AlienVault OTX pulses for each file that contains IOCs.
+Create new AlienVault OTX pulses for selected indicator reports and save the
+successful request payload locally as JSON.
 
-Key behaviours:
-- Uses otx_pulse_url from front matter (if present) to update the correct pulse directly.
-- On new pulse creation, writes the pulse URL back into the .md front matter
-  and Cross-Links section, then commits and pushes to the repo.
-- Handles Unicode right-single-quote (U+2019) in section header.
-- Truncates description to OTX's 1024-character limit.
-- Retries on transient API errors with exponential backoff.
-- Skips files with no IOCs (OTX requires at least one indicator).
+The script uses OTX_API_KEY for authentication, never updates an existing pulse,
+and never modifies the source Markdown files. A JSON file already present in the
+output directory is treated as completed and is skipped on later runs.
+Change BATCH for each export, for example: "h2-2026".
 """
 
+from __future__ import annotations
+
+import glob
+import json
 import os
 import re
 import sys
-import glob
 import time
-import subprocess
+from pathlib import Path
 
 from OTXv2 import OTXv2
 
+# Change this one value for the batch to export.
+BATCH = "h2-2026"
+
+INDICATORS_DIR = Path("indicators")
 OTX_BASE_URL = "https://otx.alienvault.com/pulse"
-
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
-
 GITHUB_PAGES_BASE = "https://threatresearch-team.github.io/indicators"
 
 BASE_TAGS = [
-    'Meta',
-    'ThreatResearch',
-    'CIB',
-    'social media manipulation',
-    'influence operations',
-    'disinformation',
-    'elections',
+    "Meta",
+    "ThreatResearch",
+    "CIB",
+    "social media manipulation",
+    "influence operations",
+    "disinformation",
+    "elections",
 ]
 
 TYPE_MAP = {
-    'url':                  'URL',
-    'domain':               'domain',
-    'hostname':             'hostname',
-    'ipv4':                 'IPv4',
-    'ip':                   'IPv4',
-    'ipv6':                 'IPv6',
-    'sha256':               'FileHash-SHA256',
-    'sha-256':              'FileHash-SHA256',
-    'md5':                  'FileHash-MD5',
-    'sha1':                 'FileHash-SHA1',
-    'sha-1':                'FileHash-SHA1',
-    'email':                'email',
-    'cve':                  'CVE',
-    'social media account': 'URL',
-    'proxy ip':             'IPv4',
-    'proxy ipv4':           'IPv4',
-    'proxy ipv6':           'IPv6',
+    "url": "URL",
+    "domain": "domain",
+    "hostname": "hostname",
+    "ipv4": "IPv4",
+    "ip": "IPv4",
+    "ipv6": "IPv6",
+    "sha256": "FileHash-SHA256",
+    "sha-256": "FileHash-SHA256",
+    "md5": "FileHash-MD5",
+    "sha1": "FileHash-SHA1",
+    "sha-1": "FileHash-SHA1",
+    "email": "email",
+    "cve": "CVE",
+    "social media account": "URL",
+    "proxy ip": "IPv4",
+    "proxy ipv4": "IPv4",
+    "proxy ipv6": "IPv6",
 }
 
 ORIGIN_KEYWORDS = {
-    'russia':   'Russia',
-    'china':    'China',
-    'iran':     'Iran',
-    'pakistan': 'Pakistan',
-    'belarus':  'Belarus',
-    'india':    'India',
-    'moldova':  'Moldova',
-    'poland':   'Poland',
+    "russia": "Russia",
+    "china": "China",
+    "iran": "Iran",
+    "pakistan": "Pakistan",
+    "belarus": "Belarus",
+    "india": "India",
+    "moldova": "Moldova",
+    "poland": "Poland",
 }
 
 TARGETED_COUNTRY_MAP = {
-    'taiwan':           'Taiwan',
-    'azerbaijan':       'Azerbaijan',
-    'moldova':          'Moldova, Republic of',
-    'poland':           'Poland',
-    'india':            'India',
-    'pakistan':         'Pakistan',
-    'iraq':             'Iraq',
-    'united states':    'United States of America',
-    'france':           'France',
-    'israel':           'Israel',
-    'united kingdom':   'United Kingdom',
-    'angola':           'Angola',
-    'ghana':            'Ghana',
-    'kenya':            'Kenya',
-    'south africa':     'South Africa',
-    'mali':             'Mali',
-    'nigeria':          'Nigeria',
-    'senegal':          'Senegal',
-    'cameroon':         'Cameroon',
-    'gabon':            'Gabon',
-    'benin':            'Benin',
-    'burkina faso':     'Burkina Faso',
+    "taiwan": "Taiwan",
+    "azerbaijan": "Azerbaijan",
+    "moldova": "Moldova, Republic of",
+    "poland": "Poland",
+    "india": "India",
+    "pakistan": "Pakistan",
+    "iraq": "Iraq",
+    "united states": "United States of America",
+    "france": "France",
+    "israel": "Israel",
+    "united kingdom": "United Kingdom",
+    "angola": "Angola",
+    "ghana": "Ghana",
+    "kenya": "Kenya",
+    "south africa": "South Africa",
+    "mali": "Mali",
+    "nigeria": "Nigeria",
+    "senegal": "Senegal",
+    "cameroon": "Cameroon",
+    "gabon": "Gabon",
+    "benin": "Benin",
+    "burkina faso": "Burkina Faso",
 }
 
-# ---------------------------------------------------------------------------
-# Retry helper
-# ---------------------------------------------------------------------------
 
-def with_retry(fn, retries=3, delay=10):
-    """Call fn(), retrying up to `retries` times on any exception."""
-    for attempt in range(1, retries + 1):
-        try:
-            return fn()
-        except Exception as e:
-            if attempt == retries:
-                raise
-            print(f"  Attempt {attempt} failed ({e}). Retrying in {delay}s...")
-            time.sleep(delay)
-            delay *= 2
-
-# ---------------------------------------------------------------------------
-# Parsing helpers
-# ---------------------------------------------------------------------------
-
-def parse_front_matter(content):
-    fm = {}
-    match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL)
-    if match:
-        for line in match.group(1).splitlines():
-            # Handle both quoted and unquoted values, and keys with underscores
-            kv = re.match(r'^([\w_]+):\s*"?(.*?)"?\s*$', line)
-            if kv:
-                fm[kv.group(1)] = kv.group(2)
-    return fm
+def parse_front_matter(content: str) -> dict[str, str]:
+    result: dict[str, str] = {}
+    match = re.match(r"^---\s*\n(.*?)\n---\s*\n", content, re.DOTALL)
+    if not match:
+        return result
+    for line in match.group(1).splitlines():
+        key_value = re.match(r'^([\w_]+):\s*"?(.*?)"?\s*$', line)
+        if key_value:
+            result[key_value.group(1)] = key_value.group(2)
+    return result
 
 
-def update_front_matter(content, pulse_url):
-    """Insert or replace the otx_pulse_url field in the YAML front matter."""
-    fm_match = re.match(r'^(---\s*\n)(.*?)(\n---\s*\n)', content, re.DOTALL)
-    if not fm_match:
-        return content
-
-    prefix  = fm_match.group(1)
-    fm_body = fm_match.group(2)
-    suffix  = fm_match.group(3)
-    rest    = content[fm_match.end():]
-
-    # Remove any existing otx_pulse_url line
-    fm_body = re.sub(r'\notx_pulse_url:.*', '', fm_body)
-    fm_body = fm_body.rstrip()
-    fm_body += f'\notx_pulse_url: "{pulse_url}"'
-
-    return prefix + fm_body + suffix + rest
-
-
-def update_cross_links(content, pulse_url):
-    """Replace the AlienVault OTX Pulse line in the Cross-Links section."""
-    new_line = f'- **AlienVault OTX Pulse:** [View on OTX]({pulse_url})'
-    return re.sub(r'- \*\*AlienVault OTX Pulse:\*\*.*', new_line, content)
-
-
-def extract_summary(content):
+def extract_summary(content: str) -> str:
     pattern = (
         r"##\s+Meta[\u2019']s\s+Adversarial\s+Threat\s+Report\s+Network\s+Summary"
-        r"\s*\n"
-        r"(.*?)"
-        r"(?=\n##\s+Indicators\s+of\s+Compromise|\Z)"
+        r"\s*\n(.*?)(?=\n##\s+Indicators\s+of\s+Compromise|\Z)"
     )
     match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
     if not match:
-        return ''
+        return ""
 
-    raw = match.group(1)
-    raw = re.sub(r'<img[^>]*>', '', raw)
-    raw = re.sub(r'!\[.*?\]\(.*?\)', '', raw)
-    raw = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', raw)
-    raw = re.sub(r'^#{2,}\s+', '', raw, flags=re.MULTILINE)
-    raw = re.sub(r'\n{3,}', '\n\n', raw).strip()
+    summary = match.group(1)
+    summary = re.sub(r"<img[^>]*>", "", summary)
+    summary = re.sub(r"!\[.*?\]\(.*?\)", "", summary)
+    summary = re.sub(r"\[([^\]]+)\]\([^\)]+\)", r"\1", summary)
+    summary = re.sub(r"^#{2,}\s+", "", summary, flags=re.MULTILINE)
+    summary = re.sub(r"\n{3,}", "\n\n", summary).strip()
 
-    if len(raw) > 1024:
-        raw = raw[:1021].rsplit(' ', 1)[0] + '...'
+    if len(summary) > 1024:
+        summary = summary[:1021].rsplit(" ", 1)[0] + "..."
+    return summary
 
-    return raw
 
-
-def parse_iocs(content):
-    iocs = []
-    parts = re.split(r'##\s+Indicators of Compromise', content, flags=re.IGNORECASE)
+def parse_iocs(content: str) -> list[dict[str, str]]:
+    indicators: list[dict[str, str]] = []
+    parts = re.split(r"##\s+Indicators of Compromise", content, flags=re.IGNORECASE)
     if len(parts) < 2:
-        return iocs
+        return indicators
 
-    table_block = re.split(r'\n##\s+', parts[1])[0]
-
-    for row in re.findall(r'^\|(.*?)\|$', table_block, re.MULTILINE):
-        cols = [c.strip() for c in row.split('|')]
-        if len(cols) < 2:
+    table_block = re.split(r"\n##\s+", parts[1])[0]
+    for row in re.findall(r"^\|(.*?)\|$", table_block, re.MULTILINE):
+        columns = [column.strip() for column in row.split("|")]
+        if len(columns) < 2:
             continue
-        raw_type  = cols[0].strip('*_ ')
-        raw_value = cols[1].strip('*_ ')
-        if re.match(r'^[-:]+$', raw_value) or raw_type.lower() in ('indicator type', 'type'):
+        raw_type = columns[0].strip("*_ ")
+        raw_value = columns[1].strip("*_ ")
+        if re.match(r"^[-:]+$", raw_value) or raw_type.lower() in {"indicator type", "type"}:
             continue
-        raw_value = raw_value.replace('`', '').replace('[.]', '.')
-        otx_type  = TYPE_MAP.get(raw_type.lower())
+        raw_value = raw_value.replace("`", "").replace("[.]", ".")
+        otx_type = TYPE_MAP.get(raw_type.lower())
         if otx_type and raw_value:
-            iocs.append({'indicator': raw_value, 'type': otx_type})
+            indicators.append({"indicator": raw_value, "type": otx_type})
+    return indicators
 
-    return iocs
 
-
-def extract_targeted_countries(title, body=''):
-    countries = []
-    match = re.search(r'[Tt]argeting\s+(.+)$', title)
+def extract_targeted_countries(title: str, body: str = "") -> list[str]:
+    countries: list[str] = []
+    match = re.search(r"[Tt]argeting\s+(.+)$", title)
     if match:
-        targets_raw = match.group(1).strip().rstrip('.')
-        parts = [p.strip().lower() for p in targets_raw.split(',')]
-        for part in parts:
+        for part in match.group(1).strip().rstrip(".").split(","):
+            part = part.strip().lower()
             for keyword, otx_name in TARGETED_COUNTRY_MAP.items():
                 if keyword in part and otx_name not in countries:
                     countries.append(otx_name)
 
-    regional_terms = ['sub-saharan africa', 'ssa', 'eastern europe', 'africa']
-    title_lower = title.lower()
-    if not countries or any(t in title_lower for t in regional_terms):
+    regional_terms = ["sub-saharan africa", "ssa", "eastern europe", "africa"]
+    if not countries or any(term in title.lower() for term in regional_terms):
         body_lower = body.lower()
         for keyword, otx_name in TARGETED_COUNTRY_MAP.items():
             if keyword in body_lower and otx_name not in countries:
                 countries.append(otx_name)
-
     return countries
 
 
-def build_tags(filename, title):
-    stem = os.path.splitext(os.path.basename(filename))[0].lower()
-    extra = []
-    for kw, label in ORIGIN_KEYWORDS.items():
-        if kw in stem and label not in extra:
+def build_tags(filename: Path, title: str, body: str = "") -> list[str]:
+    stem = filename.stem.lower()
+    extra: list[str] = []
+    for keyword, label in ORIGIN_KEYWORDS.items():
+        if keyword in stem and label not in extra:
             extra.append(label)
-    for country in extract_targeted_countries(title):
+    for country in extract_targeted_countries(title, body=body):
         if country not in extra:
             extra.append(country)
     return BASE_TAGS + extra
 
 
-def build_reference_url(filename):
-    stem = os.path.splitext(os.path.basename(filename))[0]
-    return f"{GITHUB_PAGES_BASE}/{stem}/"
-
-# ---------------------------------------------------------------------------
-# Git helper — write pulse URL back to .md and commit
-# ---------------------------------------------------------------------------
-
-def write_pulse_url_to_file(filepath, pulse_url):
-    """Update the .md file with the new pulse URL in front matter and Cross-Links."""
-    with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    new_content = update_front_matter(content, pulse_url)
-    new_content = update_cross_links(new_content, pulse_url)
-
-    if new_content != content:
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(new_content)
-        print(f"  Wrote pulse URL to {filepath}")
-        return True
-    return False
+def build_reference_url(filename: Path) -> str:
+    return f"{GITHUB_PAGES_BASE}/{filename.stem}/"
 
 
-def git_commit_and_push(filepaths):
-    """Stage the given files, commit, and push back to origin."""
-    try:
-        subprocess.run(['git', 'config', 'user.email', 'github-actions@github.com'], check=True)
-        subprocess.run(['git', 'config', 'user.name', 'GitHub Actions'], check=True)
-        subprocess.run(['git', 'add'] + filepaths, check=True)
-        result = subprocess.run(
-            ['git', 'diff', '--cached', '--quiet'],
-            capture_output=True
-        )
-        if result.returncode == 0:
-            print("  No changes to commit.")
-            return
-        subprocess.run(
-            ['git', 'commit', '-m', 'chore: update OTX pulse URLs in indicator files [skip ci]'],
-            check=True
-        )
-        subprocess.run(['git', 'push'], check=True)
-        print("  Committed and pushed pulse URL updates.")
-    except subprocess.CalledProcessError as e:
-        print(f"  WARNING: git operation failed: {e}. Pulse URLs were not saved to repo.")
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
-def sync_to_otx(api_key, md_files):
-    otx = OTXv2(api_key)
-    files_to_commit = []
-
-    for filepath in sorted(md_files):
-        print(f"\n{'='*60}")
-        print(f"Processing: {filepath}")
-
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
-
-        fm        = parse_front_matter(content)
-        title     = fm.get('title', os.path.splitext(os.path.basename(filepath))[0])
-        summary   = extract_summary(content)
-        iocs      = parse_iocs(content)
-        ref_url   = build_reference_url(filepath)
-        tags      = build_tags(filepath, title)
-        countries = extract_targeted_countries(title, body=summary)
-
-        # Check for stored pulse ID in front matter
-        stored_pulse_url = fm.get('otx_pulse_url', '').strip()
-        stored_pulse_id  = None
-        if stored_pulse_url:
-            id_match = re.search(r'/pulse/([a-f0-9]+)$', stored_pulse_url)
-            if id_match:
-                stored_pulse_id = id_match.group(1)
-
-        print(f"  Title:              {title}")
-        print(f"  IOCs:               {len(iocs)}")
-        print(f"  Summary length:     {len(summary)} chars")
-        print(f"  Targeted countries: {countries}")
-        print(f"  Stored pulse ID:    {stored_pulse_id or 'none'}")
-
-        if not iocs:
-            print("  No IOCs found — skipping (OTX requires at least one indicator).")
-            continue
-
+def with_retry(callable_, retries: int = 3, delay: int = 10):
+    """Retry transient OTX calls, with the same simple backoff as the old script."""
+    for attempt in range(1, retries + 1):
         try:
-            if stored_pulse_id:
-                # Use the stored ID directly — no name search needed
-                print(f"  Using stored pulse ID {stored_pulse_id} — updating...")
-                with_retry(lambda: otx.edit_pulse(
-                    pulse_id=stored_pulse_id,
-                    body={
-                        'description':        summary,
-                        'tags':               tags,
-                        'references':         [ref_url],
-                        'targeted_countries': countries,
-                    }
-                ))
-                with_retry(lambda: otx.replace_pulse_indicators(
-                    pulse_id=stored_pulse_id,
-                    new_indicators=iocs
-                ))
-                print("  Updated successfully.")
-
-            else:
-                # No stored ID — create a new pulse
-                print("  No stored pulse ID — creating new pulse...")
-                response = with_retry(lambda: otx.create_pulse(
-                    name=title,
-                    public=True,
-                    description=summary,
-                    indicators=iocs,
-                    tags=tags,
-                    tlp='white',
-                    references=[ref_url],
-                    targeted_countries=countries,
-                ))
-                new_id  = response.get('id', '')
-                new_url = f"{OTX_BASE_URL}/{new_id}"
-                print(f"  Created. Pulse URL: {new_url}")
-
-                # Write the pulse URL back into the .md file
-                if write_pulse_url_to_file(filepath, new_url):
-                    files_to_commit.append(filepath)
-
-        except Exception as e:
-            print(f"  ERROR: {e}")
-            sys.exit(1)
-
-        time.sleep(2)
-
-    # Commit all updated .md files in one push
-    if files_to_commit:
-        print(f"\nCommitting pulse URL updates for {len(files_to_commit)} file(s)...")
-        git_commit_and_push(files_to_commit)
-
-    print(f"\n{'='*60}")
-    print("All files processed.")
+            return callable_()
+        except Exception as exc:
+            if attempt == retries:
+                raise
+            print(f"  OTX attempt {attempt} failed: {exc}; retrying in {delay}s")
+            time.sleep(delay)
+            delay *= 2
 
 
-if __name__ == '__main__':
-    api_key = os.environ.get('OTX_API_KEY')
+def export_report(filepath: Path, otx: OTXv2) -> bool:
+    content = filepath.read_text(encoding="utf-8")
+    front_matter = parse_front_matter(content)
+    stored_url = front_matter.get("otx_pulse_url", "").strip()
+    if re.search(r"/pulse/[0-9a-fA-F]{24}/?$", stored_url):
+        print(f"Skipping {filepath}: Markdown already contains an OTX pulse URL")
+        return False
+    title = front_matter.get("title", filepath.stem)
+    summary = extract_summary(content)
+    indicators = parse_iocs(content)
+
+    if not indicators:
+        print(f"Skipping {filepath}: no supported IOCs found")
+        return False
+
+    payload = {
+        "name": title,
+        "public": True,
+        "description": summary,
+        "indicators": indicators,
+        "tags": build_tags(filepath, title, body=summary),
+        "tlp": "white",
+        "references": [build_reference_url(filepath)],
+        "targeted_countries": extract_targeted_countries(title, body=summary),
+    }
+
+    print(f"Creating OTX pulse for {filepath}...")
+    response = with_retry(lambda: otx.create_pulse(
+        name=payload["name"],
+        public=payload["public"],
+        description=payload["description"],
+        indicators=payload["indicators"],
+        tags=payload["tags"],
+        tlp=payload["tlp"],
+        references=payload["references"],
+        targeted_countries=payload["targeted_countries"],
+    ))
+    pulse_id = response.get("id") if isinstance(response, dict) else None
+    if not pulse_id:
+        raise RuntimeError(f"OTX create response did not contain a pulse id: {response!r}")
+
+    print(f"Created {OTX_BASE_URL}/{pulse_id}")
+    return True
+
+
+def main() -> None:
+    api_key = os.environ.get("OTX_API_KEY")
     if not api_key:
-        print("ERROR: OTX_API_KEY environment variable is not set.")
-        sys.exit(1)
+        raise SystemExit("OTX_API_KEY is not set")
+    otx = OTXv2(api_key)
 
-    md_files = glob.glob('indicators/*.md')
-    if not md_files:
-        print("No .md files found in indicators/ — nothing to do.")
-        sys.exit(0)
+    batch = BATCH.strip().lower()
+    if not batch:
+        raise SystemExit("BATCH must not be empty")
 
-    print(f"Found {len(md_files)} indicator file(s).")
-    sync_to_otx(api_key, md_files)
+    all_files = sorted(Path(path) for path in glob.glob(str(INDICATORS_DIR / "*.md")))
+    selected_files = [path for path in all_files if batch in path.name.lower()]
+
+    print(f"Batch: {BATCH}")
+    print(f"Found {len(all_files)} indicator file(s); selected {len(selected_files)}")
+    if not selected_files:
+        raise SystemExit(f"No indicator filenames contain {BATCH!r}")
+
+    exported = 0
+    for filepath in selected_files:
+        print(f"\nProcessing: {filepath}")
+        if export_report(filepath, otx):
+            exported += 1
+
+    print(f"\nCreated {exported} OTX pulse(s) in OTX.")
+    print("No local files were created or changed, and no existing OTX pulses were updated.")
+
+
+if __name__ == "__main__":
+    main()
